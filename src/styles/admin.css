@@ -1,0 +1,174 @@
+/* Estilo general del contenedor */
+.admin-container {
+  margin-top: 50px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 20px;
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+/* Tarjeta de admin (menú lateral o central) */
+.admin-card {
+  padding: 24px;
+  width: 100%;
+  max-width: 600px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  transition: all 0.4s ease-in-out;
+}
+
+/* Modo activo: el menú se mueve al lado izquierdo y se achica */
+.admin-container.activo .admin-card {
+  max-width: 260px;
+  min-width: 260px;
+  height: fit-content;
+  position: sticky;
+  top: 60px;
+  align-self: flex-start;
+}
+
+/* Animación de carga */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Botones */
+.admin-button {
+  font-size: 1rem;
+  text-transform: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  justify-content: flex-start;
+}
+
+.admin-button:hover {
+  background-color: #1976d2;
+  color: white;
+}
+
+.admin-button.activo {
+  background-color: #1565c0 !important;
+  font-weight: bold;
+  transform: scale(1.05);
+  color: #fff;
+}
+
+/* Botón cerrar sesión */
+.logout-button {
+  margin-top: 24px;
+  border-radius: 8px;
+  padding: 10px 20px;
+}
+
+/* Botón volver */
+.admin-volver-button {
+  font-style: italic;
+  color: #1976d2;
+  transition: 0.3s;
+}
+
+.admin-volver-button:hover {
+  text-decoration: underline;
+}
+
+/* Cuando se activa una opción: menú lateral */
+.admin-buttons-grid.lateral {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+/* Panel derecho: contenido */
+.admin-container > .outlet-panel {
+  flex: 1;
+  animation: fadeIn 0.3s ease-in-out;
+  padding: 10px;
+  max-width: 1000px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .admin-container {
+    flex-direction: column;
+  }
+
+  .admin-container.activo .admin-card {
+    max-width: 100%;
+    position: relative;
+  }
+
+  .admin-container > .outlet-panel {
+    max-width: 100%;
+  }
+}
+/* admin.css */
+
+.admin-container {
+  padding: 20px;
+}
+
+.admin-card {
+  margin-top: 20px;
+}
+
+button.activo {
+  background-color: #1976d2;
+  color: white;
+}
+/* admin.css */
+
+/* Asegurarnos de que los botones se alineen bien */
+button.activo {
+  background-color: #1976d2;
+  color: white;
+}
+
+/* Mejoramos la apariencia de los submenús */
+button {
+  margin-bottom: 10px;
+}
+
+
+/* src/styles/admin.css */
+
+.admin-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+.admin-card {
+  width: 100%;
+  max-width: 1200px;
+  padding: 20px;
+}
+
+.admin-buttons-grid {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.admin-button {
+  width: 100%; /* Cada botón ocupa el 100% de su celda */
+}
+
+.admin-button.activo {
+  background-color: #3f51b5;
+}
+
+.logout-button {
+  margin-top: 20px;
+}

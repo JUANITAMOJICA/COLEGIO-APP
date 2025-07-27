@@ -40,8 +40,12 @@ export default function GestionUsuarios() {
   const usuariosCollection = collection(db, "usuarios");
 
   const obtenerUsuarios = async () => {
-    const data = await getDocs(usuariosCollection);
-    setUsuarios(data.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
+    try {
+      const data = await getDocs(usuariosCollection);
+      setUsuarios(data.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
+    } catch (e) {
+      setError("Error al obtener usuarios: " + e.message);
+    }
   };
 
   useEffect(() => {
@@ -51,13 +55,14 @@ export default function GestionUsuarios() {
   const registrarUsuario = async () => {
     setError("");
     setSuccess("");
+
     if (!nuevoNombre || !nuevoEmail || !nuevoPassword) {
       setError("Completa todos los campos");
       return;
     }
 
     try {
-      // Crear usuario en Firebase Auth
+      // Crear usuario en Firebase Authentication
       const credencial = await createUserWithEmailAndPassword(
         auth,
         nuevoEmail,
@@ -72,10 +77,14 @@ export default function GestionUsuarios() {
       });
 
       setSuccess("Usuario creado correctamente");
+
+      // Limpiar campos
       setNuevoNombre("");
       setNuevoEmail("");
       setNuevoPassword("");
       setNuevoRol("Docente");
+
+      // Actualizar lista de usuarios
       obtenerUsuarios();
     } catch (e) {
       setError("Error al crear usuario: " + e.message);
@@ -83,9 +92,13 @@ export default function GestionUsuarios() {
   };
 
   const eliminarUsuario = async (id) => {
-    const usuarioDoc = doc(db, "usuarios", id);
-    await deleteDoc(usuarioDoc);
-    obtenerUsuarios();
+    try {
+      await deleteDoc(doc(db, "usuarios", id));
+      setSuccess("Usuario eliminado correctamente");
+      obtenerUsuarios();
+    } catch (e) {
+      setError("Error al eliminar usuario: " + e.message);
+    }
   };
 
   const comenzarEdicion = (id, nombre) => {
@@ -94,11 +107,19 @@ export default function GestionUsuarios() {
   };
 
   const guardarEdicion = async () => {
-    const usuarioDoc = doc(db, "usuarios", editandoId);
-    await updateDoc(usuarioDoc, { nombre: nombreEditado });
-    setEditandoId(null);
-    setNombreEditado("");
-    obtenerUsuarios();
+    if (!nombreEditado) {
+      setError("El nombre no puede estar vacío");
+      return;
+    }
+    try {
+      await updateDoc(doc(db, "usuarios", editandoId), { nombre: nombreEditado });
+      setSuccess("Nombre actualizado correctamente");
+      setEditandoId(null);
+      setNombreEditado("");
+      obtenerUsuarios();
+    } catch (e) {
+      setError("Error al actualizar nombre: " + e.message);
+    }
   };
 
   return (
@@ -107,8 +128,16 @@ export default function GestionUsuarios() {
         Gestión de Usuarios
       </Typography>
 
-      {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
-      {success && <Alert severity="success" sx={{ mb: 2 }}>{success}</Alert>}
+      {error && (
+        <Alert severity="error" sx={{ mb: 2 }} onClose={() => setError("")}>
+          {error}
+        </Alert>
+      )}
+      {success && (
+        <Alert severity="success" sx={{ mb: 2 }} onClose={() => setSuccess("")}>
+          {success}
+        </Alert>
+      )}
 
       {/* Formulario para registrar usuario */}
       <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap", mb: 3 }}>

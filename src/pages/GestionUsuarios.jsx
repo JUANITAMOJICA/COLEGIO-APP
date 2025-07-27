@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import {
   collection,
   getDocs,
-  addDoc,
   deleteDoc,
   doc,
   updateDoc,
+  setDoc,
 } from "firebase/firestore";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { db, auth } from "../firebase/firebaseConfig";
@@ -64,9 +64,8 @@ export default function GestionUsuarios() {
         nuevoPassword
       );
 
-      // Guardar datos del usuario en Firestore
-      await addDoc(usuariosCollection, {
-        uid: credencial.user.uid,
+      // Guardar datos del usuario en Firestore con UID como ID
+      await setDoc(doc(db, "usuarios", credencial.user.uid), {
         nombre: nuevoNombre,
         email: nuevoEmail,
         rol: nuevoRol,
